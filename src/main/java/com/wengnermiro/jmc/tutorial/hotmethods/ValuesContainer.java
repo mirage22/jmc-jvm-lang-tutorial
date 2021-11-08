@@ -24,11 +24,31 @@ import java.util.Collection;
 /**
  * @author Miroslav Wengner (@miragemiko, @mirage22)
  */
-public record ValuesContainer(int max, Collection<Integer> collection) {
+public class ValuesContainer {
+
+    private int maxElements;
+    private Collection<Integer> collection;
+
+    public ValuesContainer(int maxElements, Collection<Integer> collection) {
+        this.maxElements = maxElements;
+        this.collection = collection;
+    }
+
+    public int getMaxElements() {
+        return maxElements;
+    }
+
+    public void setMaxElements(int maxElements) {
+        this.maxElements = maxElements;
+    }
+
+    public void setCollection(Collection<Integer> collection) {
+        this.collection = collection;
+    }
 
     public void init(int modulo) {
         collection.clear();
-        for (int i = 0; i < max; i++) {
+        for (int i = 0; i < maxElements; i++) {
             if (i % modulo != 0) collection.add(i);
         }
     }

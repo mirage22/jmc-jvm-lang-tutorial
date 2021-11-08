@@ -19,6 +19,8 @@
 
 package com.wengnermiro.jmc.kotlin.hotmethods
 
+import com.wengnermiro.jmc.tutorial.hotmethods.HotMethodsExampleMain.ELEMENTS_NUMBER
+import com.wengnermiro.jmc.tutorial.hotmethods.HotMethodsExampleMain.THREADS_NUMBER
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newFixedThreadPoolContext
@@ -32,13 +34,13 @@ import kotlin.system.exitProcess
  */
 
 private val CONTEXTS_NUMBER = Runtime.getRuntime().availableProcessors()
-private val insertionContext = newFixedThreadPoolContext(5, "Insertion-Kotlin-Example")
+private val hotMethodsContext = newFixedThreadPoolContext(THREADS_NUMBER, "Hot-Method-Kotlin-Worker")
 fun main(): Unit = runBlocking {
     println("Kotlin, HotMethods Example...")
     val workerJobs = mutableListOf<Job>()
     for (i in 1..CONTEXTS_NUMBER) {
-        launch(insertionContext) {
-            val job = IntersectionKotlinWorker(i, 1000, mutableSetOf<Int>(), mutableSetOf<Int>()).run()
+        launch(hotMethodsContext) {
+            val job = IntersectionKotlinWorker(i, ELEMENTS_NUMBER, mutableListOf(), mutableListOf()).run()
             workerJobs.add(job)
         }
     }

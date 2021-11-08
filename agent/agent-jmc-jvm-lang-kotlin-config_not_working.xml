@@ -1,0 +1,29 @@
+<jfragent>
+    <!-- Global configuration options -->
+    <config>
+        <!-- This is the prefix to use when generating event class names -->
+        <classprefix>__JugJfrEvent</classprefix>
+        <!-- Will allow the recording of arrays and object parameters as Strings.
+            This will cause toString to be called for array elements and objects other
+            than strings, which in turn can cause trouble if the toString method is badly
+            implemented. Use with care. -->
+        <allowtostring>true</allowtostring>
+        <!-- Allows converters to be used. If a converter is badly implemented,
+            you are on your own. -->
+        <allowconverter>true</allowconverter>
+    </config>
+    <events>
+        <event id="jmc_jvm_lang_kotlin.latencyLoggerProcess">
+            <label>Problematic Utils in Kotlin, logger process</label>
+            <description>some important logger work</description>
+            <class>com.wengnermiro.jmc.kotlin.util.ProblematicUtils</class>
+            <path>jug_demo/problematic_util_kotlin</path>
+            <stacktrace>true</stacktrace>
+            <method>
+                <name>latencyLoggerProcess</name>
+                <descriptor>()V</descriptor>
+            </method>
+            <location>WRAP</location>
+        </event>
+    </events>
+</jfragent>

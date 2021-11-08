@@ -20,7 +20,8 @@
 package com.wengnermiro.jmc.tutorial.latency;
 
 
-import java.util.concurrent.TimeUnit;
+import com.wengnermiro.jmc.tutorial.utils.ProblematicUtil;
+
 
 /**
  * Latency logger with issues
@@ -30,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 public class LatencyLogger {
 
     private static final LatencyLogger INSTANCE = new LatencyLogger();
+    private final ProblematicUtil util = new ProblematicUtil();
 
     public static LatencyLogger getLogger() {
         return INSTANCE;
@@ -38,12 +40,7 @@ public class LatencyLogger {
     public synchronized void log(String message) {
         LatencyLoggerEvent event = new LatencyLoggerEvent(message);
         event.begin();
-        try {
-            TimeUnit.MILLISECONDS.sleep(200);
-        } catch (InterruptedException e) {
-            // Don't care
-            System.err.println(e.getMessage());
-        }
+        util.latencyLoggerProcess();
         event.commit();
     }
 }

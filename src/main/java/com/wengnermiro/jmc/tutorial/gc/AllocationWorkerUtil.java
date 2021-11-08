@@ -28,9 +28,7 @@ import java.util.Map;
 final public class AllocationWorkerUtil {
     public static void evaluate(Map<Integer, Sample> map, Integer id) {
         if (!map.containsKey(id)) {
-            System.out.printf("""
-                    WARNING, AllocationWorker-%s, number i:%s not present!
-                    """, id, id);
+            System.out.printf("WARNING, AllocationWorker-"+ id +", number i:"+ id +" not present!");
 
         }
     }

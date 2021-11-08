@@ -31,22 +31,23 @@ import java.io.IOException;
  */
 public class LatencyExampleMain {
 
-    private static final int THREADS_NUMBER = 20;
+    public static final int THREADS_NUMBER = 20;
+    public static final int COUNTER_LOOPS = 30_000_000;
+    public static final int DELAY_LATENCY = 200;
 
     public static void main(String[] args) throws IOException {
         System.out.println("Latency example...");
 
         ThreadContainerBuilder builder = new ThreadContainerBuilder()
-                .addThreadGroup("Latency-Workers");
+                .addThreadGroup("Latency-Worker");
         for(int i=0; i < THREADS_NUMBER; i++){
-            builder.addRunnable(new LatencyWorker(i, 30_000_000));
+            builder.addRunnable(new LatencyWorker(i, COUNTER_LOOPS));
         }
 
         ThreadContainer container = builder.build();
 
         container.startAsDaemon();
-        System.out.printf("""
-                Latency started status:%s, threads:%s%n""", container.isStarted(), THREADS_NUMBER);
+        System.out.println("Latency started status:"+ container.isStarted()+ ", threads:" + THREADS_NUMBER);
         System.out.println("Press any key to quit!");
         System.out.flush();
         System.in.read();

@@ -19,11 +19,13 @@
 
 package com.wengnermiro.jmc.kotlin.latency
 
+import com.wengnermiro.jmc.tutorial.latency.LatencyExampleMain.DELAY_LATENCY
 import com.wengnermiro.jmc.tutorial.latency.LatencyLoggerEvent
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.actor
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withContext
@@ -54,21 +56,20 @@ fun CoroutineScope.counterActor() = actor<CounterEvent> {
 class LatencyLoggerActor private constructor() : ProblematicKotlinLogger {
     companion object {
         val INSTANCE = LatencyLoggerActor()
-        val loggerContext = newSingleThreadContext("LatencyLoggerActor")
     }
 
 
     @OptIn(ExperimentalTime::class)
     override suspend fun log(message: String) {
 
-        withContext(loggerContext) {
+        coroutineScope {
             val counter = counterActor()
             val event = LatencyLoggerEvent("")
 
             println("log-counter-actor-start")
             counter.send(IncEvent)
             try {
-                delay(Duration.milliseconds(200))
+                delay(Duration.milliseconds(DELAY_LATENCY))
             } catch (e: InterruptedException) {
                 println(e.toString())
             }

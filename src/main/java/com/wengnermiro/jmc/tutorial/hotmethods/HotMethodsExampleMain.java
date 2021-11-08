@@ -11,7 +11,8 @@ import java.util.LinkedList;
  */
 public class HotMethodsExampleMain {
 
-    private static final int THREADS_NUMBER = Runtime.getRuntime().availableProcessors();
+    public static final int THREADS_NUMBER = 4;
+    public static final int ELEMENTS_NUMBER = 1000;
 
     public static void main(String[] args) throws IOException {
         System.out.println("HotMethods Example...");
@@ -19,7 +20,7 @@ public class HotMethodsExampleMain {
         ThreadContainerBuilder builder = new ThreadContainerBuilder()
                 .addThreadGroup("Hot-Method-Workers");
         for (int i = 0; i < THREADS_NUMBER; i++) {
-            builder.addRunnable(new IntersectionWorker(i, 1000, new LinkedList<>(), new LinkedList<>()));
+            builder.addRunnable(new IntersectionWorker(i, ELEMENTS_NUMBER, new LinkedList<>(), new LinkedList<>()));
         }
         ThreadContainer container = builder.build();
 

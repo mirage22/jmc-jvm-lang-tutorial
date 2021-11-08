@@ -19,9 +19,10 @@
 
 package com.wengnermiro.jmc.kotlin.latency
 
-import kotlinx.coroutines.Dispatchers
+import com.wengnermiro.jmc.tutorial.latency.LatencyExampleMain.THREADS_NUMBER
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.newFixedThreadPoolContext
 import kotlinx.coroutines.runBlocking
 import kotlin.system.exitProcess
 
@@ -30,12 +31,12 @@ import kotlin.system.exitProcess
  *
  * @author Miroslav Wengner (@miragemiko, @mirage22)
  */
-private const val CONTEXTS_NUMBER = 5
+private val latencyContext = newFixedThreadPoolContext(THREADS_NUMBER, "Latency-Kotlin-Actor-Worker")
 fun main(): Unit = runBlocking {
     println("Latency example started...")
     val workerJobs = mutableListOf<Job>()
-    for (i in 1..CONTEXTS_NUMBER) {
-        launch(Dispatchers.Default) {
+    for (i in 1..THREADS_NUMBER) {
+        launch(latencyContext) {
             val job = LatencyKotlinWorker(i, 2, LatencyLoggerActor.INSTANCE).run()
             workerJobs.add(job)
         }

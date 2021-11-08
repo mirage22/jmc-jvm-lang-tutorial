@@ -14,7 +14,7 @@ Note: project is inspired by the jmc-tutorial [1]
 * Garbage-Collection
 
 #### Requirements
-- Java: JDK 17+ 
+- Java: JDK 17+ or JDK 11 to use JMC Agent v1.0.0
 - Kotlin: 1.5.31+
 - Maven: 3.8+
 

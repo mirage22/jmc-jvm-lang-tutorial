@@ -19,7 +19,8 @@
 
 package com.wengnermiro.jmc.kotlin.gc
 
-import com.wengnermiro.jmc.kotlin.hotmethods.IntersectionKotlinWorker
+import com.wengnermiro.jmc.tutorial.gc.AllocationExampleMain.ALLOCATION_SIZE
+import com.wengnermiro.jmc.tutorial.gc.AllocationExampleMain.THREADS_NUMBER
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newFixedThreadPoolContext
@@ -33,14 +34,14 @@ import kotlin.system.exitProcess
  */
 
 private val CONTEXTS_NUMBER = Runtime.getRuntime().availableProcessors()
-private val insertionContext = newFixedThreadPoolContext(5, "Insertion-Kotlin-Example")
+private val insertionContext = newFixedThreadPoolContext(THREADS_NUMBER, "Insertion-Kotlin-Example")
 
-fun main():Unit = runBlocking {
+fun main(): Unit = runBlocking {
     println("Kotlin, Allocation Example...")
     val workerJobs = mutableListOf<Job>()
     for (i in 1..CONTEXTS_NUMBER) {
         launch(insertionContext) {
-            val job = AllocationKotlinWorker(i, 10_000).run()
+            val job = AllocationKotlinWorker(i, ALLOCATION_SIZE).run()
             workerJobs.add(job)
         }
     }

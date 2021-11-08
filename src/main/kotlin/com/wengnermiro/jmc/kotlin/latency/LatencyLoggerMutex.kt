@@ -20,12 +20,10 @@
 package com.wengnermiro.jmc.kotlin.latency
 
 import com.wengnermiro.jmc.tutorial.latency.LatencyLoggerEvent
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.newSingleThreadContext
+import com.wengnermiro.jmc.tutorial.utils.ProblematicUtil
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
-import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
 /**
@@ -36,21 +34,17 @@ import kotlin.time.ExperimentalTime
 class LatencyLoggerMutex private constructor() : ProblematicKotlinLogger {
     companion object {
         val INSTANCE = LatencyLoggerMutex()
-        val loggerContext = newSingleThreadContext("LatencyLoggerMutex")
         var counter = 0
         val mutex = Mutex()
+        val process = ProblematicUtil()
     }
 
     @OptIn(ExperimentalTime::class)
     override suspend fun log(message: String) {
-        withContext(loggerContext) {
+        coroutineScope {
             mutex.withLock {
                 val event = LatencyLoggerEvent(message + counter)
-                try {
-                    delay(Duration.milliseconds(200))
-                } catch (e: InterruptedException) {
-                    println(e.toString())
-                }
+                process.latencyLoggerProcess()
                 event.commit()
             }
         }

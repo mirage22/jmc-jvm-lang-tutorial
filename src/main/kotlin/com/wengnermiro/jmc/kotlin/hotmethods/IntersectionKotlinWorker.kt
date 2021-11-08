@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
  */
 class IntersectionKotlinWorker(
     private val id: Int,
-    private val number: Int,
+    private val elementsNumber: Int,
     private val c1: Collection<Int>,
     private val c2: Collection<Int>
 ) {
@@ -41,8 +41,8 @@ class IntersectionKotlinWorker(
             while (true) {
                 val event = IntersectionWorkerEvent(id)
                 event.begin()
-                val vc1 = ValuesContainer(number, c1)
-                val vc2 = ValuesContainer(number, c2)
+                val vc1 = ValuesContainer(elementsNumber, c1)
+                val vc2 = ValuesContainer(elementsNumber, c2)
 
                 vc1.init(5)
                 vc2.init(7)

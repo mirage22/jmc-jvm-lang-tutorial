@@ -24,16 +24,59 @@ import java.util.Collection;
 /**
  * @author Miroslav Wengner (@miragemiko, @mirage22)
  */
-public record IntersectionWorker(int id, int number, Collection<Integer> c1,
-                                 Collection<Integer> c2) implements Runnable {
+public class IntersectionWorker implements Runnable {
+
+    private int id;
+    private int elementsNumber;
+    private Collection<Integer> c1;
+    private Collection<Integer> c2;
+
+    public IntersectionWorker(int id, int elementsNumber, Collection<Integer> c1, Collection<Integer> c2) {
+        this.id = id;
+        this.elementsNumber = elementsNumber;
+        this.c1 = c1;
+        this.c2 = c2;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getElementsNumber() {
+        return elementsNumber;
+    }
+
+    public void setElementsNumber(int elementsNumber) {
+        this.elementsNumber = elementsNumber;
+    }
+
+    public Collection<Integer> getC1() {
+        return c1;
+    }
+
+    public void setC1(Collection<Integer> c1) {
+        this.c1 = c1;
+    }
+
+    public Collection<Integer> getC2() {
+        return c2;
+    }
+
+    public void setC2(Collection<Integer> c2) {
+        this.c2 = c2;
+    }
 
     @Override
     public void run() {
         while (true) {
             IntersectionWorkerEvent event = new IntersectionWorkerEvent(id);
             event.begin();
-            ValuesContainer vc1 = new ValuesContainer(number, c1);
-            ValuesContainer vc2 = new ValuesContainer(number, c2);
+            ValuesContainer vc1 = new ValuesContainer(elementsNumber, c1);
+            ValuesContainer vc2 = new ValuesContainer(elementsNumber, c2);
 
             vc1.init(5);
             vc2.init(7);

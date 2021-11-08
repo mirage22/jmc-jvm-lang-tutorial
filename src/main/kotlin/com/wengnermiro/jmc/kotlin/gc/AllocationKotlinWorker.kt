@@ -21,6 +21,7 @@ package com.wengnermiro.jmc.kotlin.gc
 
 import com.wengnermiro.jmc.tutorial.gc.AllocationWorkerEvent
 import com.wengnermiro.jmc.tutorial.gc.AllocationWorkerUtil
+import com.wengnermiro.jmc.tutorial.gc.AllocationWorkerUtil.evaluate
 import com.wengnermiro.jmc.tutorial.gc.Sample
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -42,12 +43,13 @@ class AllocationKotlinWorker(private val id: Int, private val size: Int) {
                 event.begin();
                 val set = map.values
                 for (e in set) {
-                    if (!map.containsKey(e.id)) {
-                        println("WARNING, AllocationWorker-$id, number i:${e.id} not present!")
-                    }
-//                    if(++counter % 1000 == 0){
-//                        Thread.yield()
+                    evaluate(map, e.id());
+//                    if (!map.containsKey(e.id)) {
+//                        println("WARNING, AllocationWorker-$id, elementsNumber i:${e.id} not present!")
 //                    }
+                    if (++counter % 1000 == 0) {
+                        Thread.yield()
+                    }
                 }
                 event.commit()
             }

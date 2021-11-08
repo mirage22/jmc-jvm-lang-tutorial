@@ -19,11 +19,10 @@
 
 package com.wengnermiro.jmc.kotlin.latency
 
+import com.wengnermiro.jmc.tutorial.latency.LatencyExampleMain.DELAY_LATENCY
 import com.wengnermiro.jmc.tutorial.latency.LatencyLoggerEvent
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.withContext
-import java.util.concurrent.atomic.AtomicLong
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
@@ -35,16 +34,16 @@ import kotlin.time.ExperimentalTime
 class LatencyLoggerAtomic private constructor() : ProblematicKotlinLogger {
     companion object {
         val INSTANCE = LatencyLoggerAtomic()
-        val loggerContext = newSingleThreadContext("LatencyLoggerAtomic")
-        val counter = AtomicLong()
+        @Volatile
+        private var counter = 0
     }
 
     @OptIn(ExperimentalTime::class)
     override suspend fun log(message: String) {
-        withContext(loggerContext) {
-            val event = LatencyLoggerEvent(message + counter.getAndIncrement())
+        coroutineScope {
+            val event = LatencyLoggerEvent(message + counter++)
             try {
-                delay(Duration.milliseconds(200))
+                delay(Duration.milliseconds(DELAY_LATENCY))
             } catch (e: InterruptedException) {
                 println(e.toString())
             }

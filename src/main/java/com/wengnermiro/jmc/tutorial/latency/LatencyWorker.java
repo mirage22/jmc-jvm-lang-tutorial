@@ -22,9 +22,17 @@ package com.wengnermiro.jmc.tutorial.latency;
 /**
  * @author Miroslav Wengner (@miragemiko, @mirage22)
  */
-public record LatencyWorker(int id, int loopCounter) implements Runnable {
+public class LatencyWorker implements Runnable {
 
     private static final LatencyLogger LOGGER = LatencyLogger.getLogger();
+
+    private final int id;
+    private final int loopCounter;
+
+    public LatencyWorker(int id, int loopCounter) {
+        this.id = id;
+        this.loopCounter = loopCounter;
+    }
 
     @Override
     public void run() {
@@ -37,14 +45,11 @@ public record LatencyWorker(int id, int loopCounter) implements Runnable {
                 x += 1;
                 y = y % (this.loopCounter + 3);
                 if (x % (this.loopCounter + 4) == 0 || y == 0) {
-                    System.out.printf("""
-                            LatencyWorker-%s, Should not happen%n""", id);
+                    System.out.println("LatencyWorker-"+ id +", Should not happen");
                 }
             }
             event.commit();
-            LOGGER.log(String.format("""
-                    LatencyWorker-%s work done
-                    """, id));
+            LOGGER.log("LatencyWorker-"+ id +" work done");
             Thread.yield();
         }
     }

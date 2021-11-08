@@ -31,7 +31,8 @@ import java.io.IOException;
  */
 public class AllocationExampleMain {
 
-    private static final int THREADS_NUMBER = 2;
+    public static final int THREADS_NUMBER = 2;
+    public static final int ALLOCATION_SIZE = 10_000;
 
     public static void main(String[] args) throws IOException {
         System.out.println("Memory allocation example...");
@@ -39,14 +40,13 @@ public class AllocationExampleMain {
         ThreadContainerBuilder builder = new ThreadContainerBuilder()
                 .addThreadGroup("Allocation-Workers");
         for (int i = 0; i < THREADS_NUMBER; i++) {
-            builder.addRunnable(new AllocationWorker(i, 10_000));
+            builder.addRunnable(new AllocationWorker(i, ALLOCATION_SIZE));
         }
 
         ThreadContainer container = builder.build();
 
         container.startAsDaemon();
-        System.out.printf("""
-                Latency started status:%s, threads:%s%n""", container.isStarted(), THREADS_NUMBER);
+        System.out.println("Latency started status:" + container.isStarted() + ", threads:" + THREADS_NUMBER);
         System.out.println("Press any key to quit!");
         System.out.flush();
         System.in.read();
