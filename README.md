@@ -3,7 +3,8 @@ The project contains a collection of JFR usage examples for considered languages
 The goal is to present "comparable" use cases. The examples may slightly vary 
 due to the language but the intent holds.
 
-Note: project is inspired by the jmc-tutorial [1]
+Note 1: project is inspired by the jmc-tutorial [1]
+Note 2: slides from the JUG presentation [2]
 
 1. Java
 2. Kotlin
@@ -31,3 +32,4 @@ create a continuous reading: ``-XX:+FlightRecorder -XX:StartFlightRecording=file
 
 ## Reference
 1. JMC-Tutorial: https://github.com/thegreystone/jmc-tutorial
+2. JUG-Ingolstadt: Kotlin spezial - Presentation slides 20211109_IngJUG_JFR_KotlinSpezial.pdf
