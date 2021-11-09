@@ -48,7 +48,7 @@ public class AllocationExampleMain {
         ThreadContainer container = builder.build();
 
         container.startAsDaemon();
-        System.out.println("Latency started status:" + container.isStarted() + ", threads:" + THREADS_NUMBER);
+        System.out.println("Memory allocation started status:" + container.isStarted() + ", threads:" + THREADS_NUMBER);
         System.out.println("Press any key to quit!");
         System.out.flush();
         System.in.read();

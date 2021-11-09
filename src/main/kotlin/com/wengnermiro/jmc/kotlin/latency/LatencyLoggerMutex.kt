@@ -33,7 +33,7 @@ import kotlin.time.ExperimentalTime
  */
 
 //fun ProblematicUtil.someMoreDelay(){
-//    val event = SimpleKotlinEvent()
+//    val event = SampleKotlinEvent()
 //    event.begin()
 //    this.latencyLoggerProcess()
 //    event.end()
@@ -54,6 +54,7 @@ class LatencyLoggerMutex private constructor() : ProblematicKotlinLogger {
             mutex.withLock {
                 val event = LatencyLoggerEvent(message + counter)
                 process.latencyLoggerProcess()
+//                process.someMoreDelay()
                 event.commit()
             }
         }

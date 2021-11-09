@@ -23,9 +23,9 @@ import jdk.jfr.Event
 import jdk.jfr.Label
 
 /**
- * SimpleKotlinEvent
+ * SampleKotlinEvent
  */
-@Label("Latency-Worker-SimpleKotlinEvent")
+@Label("Latency-Worker-SampleKotlinEvent")
 @Category("Latency_Example")
 @Description("something is done")
-class SimpleKotlinEvent() : Event()
+class SampleKotlinEvent() : Event()
