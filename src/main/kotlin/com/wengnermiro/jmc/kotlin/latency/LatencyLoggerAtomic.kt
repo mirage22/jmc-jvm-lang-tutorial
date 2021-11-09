@@ -27,7 +27,7 @@ import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
 /**
- *
+ * LatencyLoggerAtomic problematic logger
  *
  * @author Miroslav Wengner (@miragemiko, @mirage22)
  */

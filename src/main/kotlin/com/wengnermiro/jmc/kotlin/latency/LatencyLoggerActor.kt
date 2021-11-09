@@ -27,14 +27,13 @@ import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.withContext
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
 /**
- *
+ * LatencyLoggerActor problematic logger
  *
  * @author Miroslav Wengner (@miragemiko, @mirage22)
  */
@@ -42,13 +41,15 @@ sealed class CounterEvent
 object IncEvent : CounterEvent()
 class GetCounterEvent(val result: CompletableDeferred<Int>) : CounterEvent()
 
+private val loggerActorContext = newSingleThreadContext("LatencyLogger-Actor")
+
 @OptIn(ObsoleteCoroutinesApi::class)
 fun CoroutineScope.counterActor() = actor<CounterEvent> {
-    val counter = AtomicInteger()
+    var counter = 0
     for (event in channel) {
         when (event) {
-            is IncEvent -> counter.incrementAndGet()
-            is GetCounterEvent -> event.result.complete(counter.get())
+            is IncEvent -> counter++
+            is GetCounterEvent -> event.result.complete(counter)
         }
     }
 }
@@ -58,30 +59,28 @@ class LatencyLoggerActor private constructor() : ProblematicKotlinLogger {
         val INSTANCE = LatencyLoggerActor()
     }
 
-
     @OptIn(ExperimentalTime::class)
     override suspend fun log(message: String) {
-
         coroutineScope {
-            val counter = counterActor()
-            val event = LatencyLoggerEvent("")
+            launch(loggerActorContext) {
 
-            println("log-counter-actor-start")
-            counter.send(IncEvent)
-            try {
-                delay(Duration.milliseconds(DELAY_LATENCY))
-            } catch (e: InterruptedException) {
-                println(e.toString())
+                val counter = counterActor()
+                val event = LatencyLoggerEvent("")
+
+                counter.send(IncEvent)
+                try {
+                    delay(Duration.milliseconds(DELAY_LATENCY))
+                } catch (e: InterruptedException) {
+                    println(e.toString())
+                }
+                val response = CompletableDeferred<Int>()
+                counter.send(GetCounterEvent(response))
+                val counterVal = response.await()
+                val eventText = "$message, counter=$counterVal"
+                event.message = message;
+                event.commit()
+                println("log-counter-actor-response-text:$eventText")
             }
-            val response = CompletableDeferred<Int>()
-            counter.send(GetCounterEvent(response))
-            println("log-counter-actor-response")
-            val counterVal = response.await()
-            val eventText = "$message, counter=$counterVal"
-            println("log-counter-actor-response-text:$eventText")
-            event.message = message;
-            event.commit()
-            Thread.yield()
         }
 
     }

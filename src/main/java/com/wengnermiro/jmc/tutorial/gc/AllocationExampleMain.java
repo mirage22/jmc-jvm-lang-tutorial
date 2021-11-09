@@ -27,6 +27,8 @@ import java.io.IOException;
 /**
  * Memory allocation example
  *
+ * hint: by changing a small piece of code. GC pressure is be 0
+ *
  * @author Miroslav Wengner (@miragemiko, @mirage22)
  */
 public class AllocationExampleMain {

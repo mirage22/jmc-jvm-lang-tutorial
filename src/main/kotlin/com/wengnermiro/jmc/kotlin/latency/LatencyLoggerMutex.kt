@@ -27,10 +27,19 @@ import kotlinx.coroutines.sync.withLock
 import kotlin.time.ExperimentalTime
 
 /**
- *
+ * LatencyLoggerMutex problematic logger
  *
  * @author Miroslav Wengner (@miragemiko, @mirage22)
  */
+
+//fun ProblematicUtil.someMoreDelay(){
+//    val event = SimpleKotlinEvent()
+//    event.begin()
+//    this.latencyLoggerProcess()
+//    event.end()
+//    event.commit()
+//}
+
 class LatencyLoggerMutex private constructor() : ProblematicKotlinLogger {
     companion object {
         val INSTANCE = LatencyLoggerMutex()
